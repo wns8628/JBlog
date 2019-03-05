@@ -35,16 +35,16 @@
 	</mvc:message-converters>
  -->
 		<!-- Controller의 Handler의 Argument Resolver 등록 -->
-<!-- 		<mvc:argument-resolvers>
+		<mvc:argument-resolvers>
 			<bean class="com.douzone.security.AuthUserHandlerMethodArgumentResolver"/>
-		</mvc:argument-resolvers> -->
+		</mvc:argument-resolvers>
 	</mvc:annotation-driven>
 
 	<!-- 서블릿 컨테이너의 디폴트 서블릿 위임 핸들러 -->
 	<mvc:default-servlet-handler/>
 	
 	<!-- the mvc resources mapping url(virtual) 가상? -->
-	<!-- <mvc:resources mapping="/uploads/images/**" location="file:/duzon/uploads/"/> -->
+	<mvc:resources mapping="/assets/images/**" location="file:/duzon/uploads/"/>
 	
 	<!-- 어노테이션설정을하겠다  -->
 	<context:annotation-config />
@@ -60,7 +60,7 @@
 			<mvc:mapping path="/user/logout"/>
 			<bean class="com.douzone.security.AuthLogoutInterceptor"/>
 		</mvc:interceptor>
-<!-- 		<mvc:interceptor>
+<!-- 	<mvc:interceptor>
 			<mvc:mapping path="/**"/>
 			<mvc:exclude-mapping path="/user/auth"/>
 			<mvc:exclude-mapping path="/user/logout"/>	
@@ -78,18 +78,19 @@
 	</bean>
 
 	<!-- 멀티파트 리졸버 -->
-<!-- 	
+	
+	<!-- 멀티파트 리졸버 -->
 	<bean id="multipartResolver" 
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		최대업로드 가능한 바이트크기
+		<!-- 최대업로드 가능한 바이트크기 -->
 		<property name="maxUploadSize" value="52428800" />
-		디스크에 임시 파일을 생성하기 전에 메모리에 보관할수있는 최대 바이트 크기
-		property name="maxInMemorySize" value="52428800" /
-		defaultEncoding
+		<!-- 디스크에 임시 파일을 생성하기 전에 메모리에 보관할수있는 최대 바이트 크기 -->
+		<!-- property name="maxInMemorySize" value="52428800" /-->
+		<!-- defaultEncoding -->
 		<property name="defaultEncoding" value="utf-8" />
 	</bean>	
 	
-	
+<!-- 
 	 MessageSource
 	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
 	   <property name="basenames">

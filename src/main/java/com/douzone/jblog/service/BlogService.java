@@ -24,9 +24,9 @@ public class BlogService {
 	CategoryDao categoryDao;
 
 	
-	public Map<String,Object> getblog(String name, long categoryNo , long postNo) {
+	public Map<String,Object> getblog(String id, Long categoryNo , Long postNo) {
 		//1.userNo구하기 
-		long userNo = blogDao.get(name);
+		long userNo = blogDao.get(id);
 		
 		//2.타이틀 로고가져오기 
 		BlogVo blogVo = blogDao.get(userNo);
@@ -36,15 +36,21 @@ public class BlogService {
 		PostVo postVo = postDao.get(userNo, categoryNo, postNo);
 		//5.글목록 가져오기
 		List<PostVo> postList = postDao.getList(userNo, categoryNo);
-				
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("blogVo", blogVo);
 		map.put("categoryList", categoryList);
 		map.put("postVo", postVo);
 		map.put("postList", postList);
-				
+					
 		return map;
 	}
 	
+	public BlogVo getAdmin(String id) {
+		long userNo = blogDao.get(id);
+		return blogDao.get(userNo);
+	}
+	public boolean adminUpdata(long userNo, BlogVo blogVo) {
+		return blogDao.update(userNo,blogVo);
+	}
 }

@@ -72,6 +72,7 @@ public class PostDao {
 		return result;
 	}
 	
+
 public List<PostVo> getList(long userNo,long categoryNo){
 		
 		List<PostVo> list = new ArrayList<PostVo>();
@@ -90,7 +91,8 @@ public List<PostVo> getList(long userNo,long categoryNo){
 					"  from post a, category b \r\n" + 
 					" where a.category_no = b.no\r\n" + 
 					"   and a.category_no = ? " + 
-					"   and b.user_no = ? ";
+					"   and b.user_no = ? " + 
+					"   order by reg_date desc";
 				
 			pstmt = conn.prepareCall(sql);
 			pstmt.setLong(1, categoryNo);

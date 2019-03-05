@@ -14,7 +14,7 @@ import com.douzone.jblog.vo.BlogVo;
 public class BlogDao {
 	
 	
-	public long get(String name) {
+	public long get(String id) {
 		long result = 0;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -22,9 +22,9 @@ public class BlogDao {
 		
 		try {
 			conn = getConnection();				 
-			String sql= "select no from user where name = ?";
+			String sql= "select no from user where id = ?";
 			pstmt = conn.prepareCall(sql);
-			pstmt.setString(1, name);
+			pstmt.setString(1, id);
 			
 			rs = pstmt.executeQuery();		
 			
@@ -85,6 +85,49 @@ public class BlogDao {
 				if(rs != null) {
 					rs.close();
 				}
+				if(conn != null) {
+					conn.close();
+				}
+				if(pstmt != null) {
+					pstmt.close();
+				}
+			} catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
+	
+	public boolean update(long userNo, BlogVo vo) {
+		boolean result = false;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+				
+		try {
+			 conn = getConnection();	
+			 
+			 String sql = "update blog set title=?, logo=? where user_no=?";
+				
+				pstmt = conn.prepareCall(sql);
+				
+				
+				System.out.println(vo.getLogo());
+				System.out.println(vo.getUserNo());
+				
+				pstmt.setString(1, vo.getTitle());
+				pstmt.setString(2, vo.getLogo());
+				pstmt.setLong(3, userNo);
+				
+			int count = pstmt.executeUpdate();
+			result = count ==1;		
+			
+			System.out.println(result);
+			 
+		}  catch (SQLException e) {
+			System.out.println( "error: "+e );
+		} finally {
+			try {
 				if(conn != null) {
 					conn.close();
 				}

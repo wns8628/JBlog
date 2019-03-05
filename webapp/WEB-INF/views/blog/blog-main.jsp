@@ -25,8 +25,25 @@
 					<p>
 				</div>
 				<ul class="blog-list">
-					<c:forEach items="${postList}" var="postListVo" varStatus="status">					
-						<li><a href="">${postListVo.title }</a> <span>${postListVo.regDate }</span>	</li>
+					<c:forEach items="${postList}" var="postListVo" varStatus="status">	
+					  	<c:choose>				
+					  		<c:when test="${postVo.no == postListVo.no}">
+							  	 <li class="selected">
+				                 	<a href="${pageContext.request.contextPath}/${userId}/${postListVo.categoryNo}/${postListVo.no}">
+										${postListVo.title }
+									</a><sapn style="color:red">(현재 글)</span> 
+									<span>${postListVo.regDate }</span>	
+			                  	 </li>
+					  		</c:when>
+					  		<c:otherwise>
+				  				<li>
+									<a href="${pageContext.request.contextPath}/${userId}/${postListVo.categoryNo}/${postListVo.no}">
+										${postListVo.title }
+									</a> 
+									<span>${postListVo.regDate }</span>	
+								</li>
+					  		</c:otherwise>
+					  	</c:choose>						
 					</c:forEach>
 				</ul>
 			</div>
@@ -42,7 +59,7 @@
 			<h2>카테고리</h2>
 			<ul>
 				<c:forEach items="${categoryList}" var="categoryVo" varStatus="status">					
-					<li><a href="">${categoryVo.name }</a></li>
+					<li><a href="${pageContext.request.contextPath}/${userId}/${categoryVo.no }/${categoryVo.topPostNo}">${categoryVo.name }</a></li>
 				</c:forEach>
 			</ul>
 		</div>

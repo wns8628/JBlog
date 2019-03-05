@@ -30,11 +30,21 @@ public class CategoryDao {
 			 rs = null;
 			
 			 
-			String sql = "select no,name,description,reg_date, user_no "
-						 + "from category "
-						 + "where user_no = " + uNo;
+			String sql = "select distinct(b.no), b.name, b.DESCRIPTION , b.REG_DATE, b.USER_NO, (select c.no\r\n" + 
+					"															   from post c, category d \r\n" + 
+					"															  where c.category_no = d.no\r\n" + 
+					"															    and c.category_no = b.no\r\n" + 
+					"															    and d.user_no = ? \r\n" + 
+					"                                                                order by c.reg_date desc\r\n" + 
+					"															    limit 0,1 ) as top_post\r\n" + 
+					"  from post a right join category b\r\n" + 
+					"	on a.category_no = b.no\r\n" + 
+					" WHERE user_no = ? ";
 			
-			pstmt = conn.prepareStatement(sql);						
+			pstmt = conn.prepareCall(sql);			
+			pstmt.setLong(1, uNo);
+			pstmt.setLong(2, uNo);
+			
 			rs= pstmt.executeQuery();
 			  			
 			while(rs.next()) {
@@ -44,13 +54,15 @@ public class CategoryDao {
 				String description = rs.getString(3);
 				String regDate = rs.getString(4);
 				long userNo = rs.getLong(5);
-		
+				long topPostNo = rs.getLong(6);
+				
 				CategoryVo vo = new CategoryVo();
 				vo.setNo(no);
 				vo.setName(name);
 				vo.setDescription(description);
 				vo.setRegDate(regDate);
 				vo.setUserNo(userNo);
+				vo.setTopPostNo(topPostNo);
 				
 				list.add(vo);
 			}

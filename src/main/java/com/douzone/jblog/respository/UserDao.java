@@ -40,7 +40,7 @@ public class UserDao {
 				rs.next();
 				long no = rs.getLong(1);
 				
-				sql="insert into blog values(?,?,'/assets/images/default.jpg')";
+				sql="insert into blog values(?,?,'/assets/images/default.png')";
 				pstmt = conn.prepareCall(sql);
 				pstmt.setLong(1,no);
 				pstmt.setString(2, vo.getName() + "님의 블로그 입니다.");
@@ -79,7 +79,7 @@ public class UserDao {
 		try {
 			 conn = getConnection();	
 			 
-			String sql="select no,name"
+			String sql="select no,id,name"
 					+ " from user "
 					+ " where id=? and password=?";
 										//이름,패스워드,글,날짜
@@ -92,11 +92,14 @@ public class UserDao {
 			
 			if(rs.next()) {				
 			long no = rs.getLong(1);
-			String name = rs.getString(2);
+			String id = rs.getString(2);
+			String name = rs.getString(3);
 			
 			result = new UserVo();
 			result.setNo(no);
+			result.setId(id);
 			result.setName(name);	
+			System.out.println(result.toString());
 			}
 			 
 		}  catch (SQLException e) {
