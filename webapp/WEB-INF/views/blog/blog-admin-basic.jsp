@@ -20,11 +20,11 @@
 		
 		<div id="wrapper">
 			<div id="content" class="full-screen">
-				<ul class="admin-menu">
-					<li class="selected">기본설정</li>
-					<li><a href="">카테고리</a></li>
-					<li><a href="">글작성</a></li>
-				</ul>
+				
+				<c:import url="/WEB-INF/views/includes/blog-navigation.jsp">
+					<c:param name="menu" value="blog-basic"/>
+				</c:import>
+				
 				<form action="${pageContext.request.contextPath}/${authuser.id}/admin" method="post"
 					  enctype="multipart/form-data">
 					  

@@ -53,4 +53,11 @@ public class BlogService {
 	public boolean adminUpdata(long userNo, BlogVo blogVo) {
 		return blogDao.update(userNo,blogVo);
 	}
+	public List<CategoryVo> adminCategory(long userNo){
+		List<CategoryVo> categoryList= categoryDao.getList(userNo);
+		return categoryList;
+	}
+	public long adminPutCategory(long userNo,CategoryVo categoryVo){		
+		return categoryDao.insert(userNo, categoryVo);
+	}
 }

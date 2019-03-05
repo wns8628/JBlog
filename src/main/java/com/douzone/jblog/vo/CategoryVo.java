@@ -7,6 +7,7 @@ public class CategoryVo {
 	private String regDate;
 	private long userNo;
 	private long topPostNo;
+	private int postCount;
 	public long getNo() {
 		return no;
 	}
@@ -43,11 +44,18 @@ public class CategoryVo {
 	public void setTopPostNo(long topPostNo) {
 		this.topPostNo = topPostNo;
 	}
+	public int getPostCount() {
+		return postCount;
+	}
+	public void setPostCount(int postCount) {
+		this.postCount = postCount;
+	}
 	@Override
 	public String toString() {
 		return "CategoryVo [no=" + no + ", name=" + name + ", description=" + description + ", regDate=" + regDate
-				+ ", userNo=" + userNo + ", topPostNo=" + topPostNo + "]";
+				+ ", userNo=" + userNo + ", topPostNo=" + topPostNo + ", postCount=" + postCount + "]";
 	}
+	
 	
 	
 }

@@ -11,6 +11,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.douzone.jblog.vo.CategoryVo;
+import com.douzone.jblog.vo.UserVo;
 
 
 @Repository
@@ -34,12 +35,14 @@ public class CategoryDao {
 					"															   from post c, category d \r\n" + 
 					"															  where c.category_no = d.no\r\n" + 
 					"															    and c.category_no = b.no\r\n" + 
-					"															    and d.user_no = ? \r\n" + 
+					"															    and d.user_no = ? " + 
 					"                                                                order by c.reg_date desc\r\n" + 
-					"															    limit 0,1 ) as top_post\r\n" + 
+					"															    limit 0,1 ) as top_post , \r\n" + 
+					"																						  (select count(*) from post where category_no= a.category_no) as postCount\r\n" + 
+					"                                                                \r\n" + 
 					"  from post a right join category b\r\n" + 
 					"	on a.category_no = b.no\r\n" + 
-					" WHERE user_no = ? ";
+					" WHERE user_no = ?";
 			
 			pstmt = conn.prepareCall(sql);			
 			pstmt.setLong(1, uNo);
@@ -55,6 +58,7 @@ public class CategoryDao {
 				String regDate = rs.getString(4);
 				long userNo = rs.getLong(5);
 				long topPostNo = rs.getLong(6);
+				int postCount = rs.getInt(7);
 				
 				CategoryVo vo = new CategoryVo();
 				vo.setNo(no);
@@ -63,6 +67,7 @@ public class CategoryDao {
 				vo.setRegDate(regDate);
 				vo.setUserNo(userNo);
 				vo.setTopPostNo(topPostNo);
+				vo.setPostCount(postCount);
 				
 				list.add(vo);
 			}
@@ -87,6 +92,52 @@ public class CategoryDao {
 		return list;
 	}
 	
+	public long insert(long userNo, CategoryVo vo) /*throws UserDaoException*/ {
+		long result = 0;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			conn = getConnection();	
+			 
+			String sql="insert into category values(null, ?,?,now(),?)";
+			pstmt = conn.prepareCall(sql);
+			
+			pstmt.setString(1, vo.getName());
+			pstmt.setString(2, vo.getDescription());
+			pstmt.setLong(3, userNo);
+			
+			pstmt.executeUpdate();
+			
+			/* 방금들어간 row의 primary key no */
+			sql = "select last_insert_id()";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			rs.next();
+			
+			result = rs.getLong(1);
+				
+
+		}  catch (SQLException e) {
+//			throw new UserDaoException("회원정보 저장 실패");
+			System.out.println("error:" + e);
+		} finally {
+			try {
+				if(conn != null) {
+					conn.close();
+				}
+				if(pstmt != null) {
+					pstmt.close();
+				}
+			} catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
 	
 	private Connection getConnection() throws SQLException {
 	      Connection conn = null;

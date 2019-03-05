@@ -1,5 +1,6 @@
 package com.douzone.jblog.controller;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.douzone.jblog.service.BlogService;
 import com.douzone.jblog.service.FileuploadService;
 import com.douzone.jblog.vo.BlogVo;
+import com.douzone.jblog.vo.CategoryVo;
 import com.douzone.jblog.vo.UserVo;
 import com.douzone.security.AuthUser;
 
@@ -27,7 +29,7 @@ public class BlogController {
 	@Autowired
 	FileuploadService fileuploadService;
 //---------------------------------------------------------------------------
-	@RequestMapping(value= {"","{pathNo1}","/{pathNo1}/{pathNo2}"})
+	@RequestMapping(value= {"","/{pathNo1}","/{pathNo1}/{pathNo2}"}/*, method=RequestMethod.GET*/)
 	public String index(@PathVariable String id,
 					    @PathVariable Optional<Long> pathNo1,
 					    @PathVariable Optional<Long> pathNo2,
@@ -87,13 +89,18 @@ public class BlogController {
 	
 //---------------------------------------------------------------------
 	
-	@RequestMapping(value="/admin/category" ,method=RequestMethod.POST)
-	public String category(){
-		
-		return "blog/blog-admin-category";			
-	}
+//	@RequestMapping(value="/admin/category" ,method=RequestMethod.GET)
+//	public String category(@AuthUser UserVo authUser, 
+//						   Model model){
+//		
+//		
+//		List<CategoryVo> categoryList = blogService.adminCategory(authUser.getNo());
+//		System.out.println(categoryList);
+//		model.addAttribute("categoryList",categoryList);
+//		return "blog/blog-admin-category";			
+//	}
 	
-	@RequestMapping(value="/admin/write" ,method=RequestMethod.POST)
+	@RequestMapping(value="/admin/write" ,method=RequestMethod.GET)
 	public String write(){
 		
 		return "blog/blog-admin-write";			
