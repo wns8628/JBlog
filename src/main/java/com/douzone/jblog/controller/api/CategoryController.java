@@ -44,4 +44,14 @@ public class CategoryController {
 		
 		return JSONResult.success(categoryVo);		
 	}
+	
+	@ResponseBody
+	@RequestMapping(value="/admin/category/list/delete" ,method=RequestMethod.POST)
+	public Object categorydelete(@AuthUser UserVo authUser,
+								 CategoryVo categoryVo){
+
+		boolean success= blogService.adminDeleteCategory(authUser.getNo(),categoryVo.getNo());
+		
+		return JSONResult.success(success);		
+	}
 }

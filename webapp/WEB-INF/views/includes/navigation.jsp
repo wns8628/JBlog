@@ -18,7 +18,7 @@
 					<c:otherwise>
 						<li>${authuser.name } 님 반갑습니다.</li>						
 						<li><a href="${pageContext.request.contextPath }/user/logout">로그아웃</a></li>
-						<li><a href="${pageContext.request.contextPath}/${authuser.name}">내블로그</a></li>					
+						<li><a href="${pageContext.request.contextPath}/${authuser.id}">내블로그</a></li>					
 					</c:otherwise>
 				</c:choose>
 			</ul>
@@ -33,7 +33,7 @@
 					<c:otherwise>
 						<li>${authuser.name } 님 반갑습니다.</li>
 						<li><a href="${pageContext.request.contextPath }/user/logout">로그아웃</a></li>
-						<li><a href="${pageContext.request.contextPath}/${authuser.name}">내블로그</a></li>		
+						<li><a href="${pageContext.request.contextPath}/${authuser.id}">내블로그</a></li>		
 					</c:otherwise>
 				</c:choose>
 			</ul>
@@ -48,7 +48,7 @@
 					<c:otherwise>
 						<li>${authuser.name } 님 반갑습니다.</li>
 						<li><a href="${pageContext.request.contextPath }/user/logout">로그아웃</a></li>
-						<li><a href="${pageContext.request.contextPath}/${authuser.name}">내블로그</a></li>				
+						<li><a href="${pageContext.request.contextPath}/${authuser.id}">내블로그</a></li>				
 					</c:otherwise>
 				</c:choose>
 			</ul>

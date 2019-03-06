@@ -34,15 +34,16 @@ public class CategoryDao {
 			String sql = "select distinct(b.no), b.name, b.DESCRIPTION , b.REG_DATE, b.USER_NO, (select c.no\r\n" + 
 					"															   from post c, category d \r\n" + 
 					"															  where c.category_no = d.no\r\n" + 
-					"															    and c.category_no = b.no\r\n" + 
-					"															    and d.user_no = ? " + 
+					"																and c.category_no = b.no \r\n" + 
+					"															    and d.user_no = ?\r\n" + 
 					"                                                                order by c.reg_date desc\r\n" + 
-					"															    limit 0,1 ) as top_post , \r\n" + 
+					"															    limit 0,1) as top_post, \r\n" + 
 					"																						  (select count(*) from post where category_no= a.category_no) as postCount\r\n" + 
 					"                                                                \r\n" + 
 					"  from post a right join category b\r\n" + 
 					"	on a.category_no = b.no\r\n" + 
-					" WHERE user_no = ?";
+					" WHERE user_no = ?\r\n" + 
+					" order by no asc;";
 			
 			pstmt = conn.prepareCall(sql);			
 			pstmt.setLong(1, uNo);
@@ -91,6 +92,7 @@ public class CategoryDao {
 		}
 		return list;
 	}
+
 	
 	public long insert(long userNo, CategoryVo vo) /*throws UserDaoException*/ {
 		long result = 0;
@@ -139,6 +141,47 @@ public class CategoryDao {
 		return result;
 	}
 	
+	//지우기
+		public boolean delete(long userNo, long categoryNo) {
+			
+			boolean result = false;
+			Connection conn = null;
+			PreparedStatement pstmt = null;
+					
+			try {
+				 conn = getConnection();	
+				 
+				String sql="delete from category where no=? and user_no=? ";
+											//이름,패스워드,글,날짜
+				
+				pstmt = conn.prepareCall(sql);
+				
+				pstmt.setLong(1, categoryNo);
+				pstmt.setLong(2, userNo);
+				
+				int count = pstmt.executeUpdate();
+				
+				result = count ==1;			
+				 
+			}  catch (SQLException e) {
+				System.out.println( "error: "+e );
+			} finally {
+				try {
+					if(conn != null) {
+						conn.close();
+					}
+					if(pstmt != null) {
+						pstmt.close();
+					}
+				} catch(SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			
+			return result;
+		}
+
 	private Connection getConnection() throws SQLException {
 	      Connection conn = null;
 	

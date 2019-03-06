@@ -6,6 +6,21 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.9.0.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+
+var valied = function(){
+	
+	//validate form data 유효성검사
+	var title = $("#title").val();
+	if(title == ""){
+		alert("제목은 필수 입력 항목입니다.");
+		return false;
+	} 
+	return true;
+}
+</script>
 <title>JBlog</title>
 <Link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/jblog.css">
 </head>
@@ -25,14 +40,14 @@
 					<c:param name="menu" value="blog-basic"/>
 				</c:import>
 				
-				<form action="${pageContext.request.contextPath}/${authuser.id}/admin" method="post"
+				<form onsubmit="return valied()" action="${pageContext.request.contextPath}/${authuser.id}/admin" method="post"
 					  enctype="multipart/form-data">
 					  
 	 		      	<table class="admin-config">
 			      		<tr>
 			      			<td class="t">블로그 제목</td>
 			      			<td>
-			      				<input type="text" size="40" name="title" value="${blogVo.title }">
+			      				<input type="text" size="40" id="title" name="title" value="${blogVo.title }">
 			      			</td>
 			      		</tr>
 			      		<tr>
@@ -41,7 +56,8 @@
 			      		</tr>      		
 			      		<tr>
 			      			<td class="t">&nbsp;</td>
-			      			<td><input type="file" name="logo-file"/></td>      			
+			      			<td><input type="file" name="logo-file"/></td>   
+			      			<input type="hidden" name="keep-logo" value="${blogVo.logo}"/>   			
 			      		</tr>           		
 			      		<tr>
 			      			<td class="t">&nbsp;</td>

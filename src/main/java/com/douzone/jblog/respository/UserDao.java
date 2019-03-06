@@ -48,7 +48,31 @@ public class UserDao {
 				count = pstmt.executeUpdate();
 				
 				result = count == 1;
+
+				if(result) {
+					sql = "insert into category values(null, '미분류','카테고리를 추가해 주세요',now(),?)";
+					pstmt = conn.prepareCall(sql);
+					pstmt.setLong(1,no);
+					count = pstmt.executeUpdate();
+					
+					sql = "select last_insert_id()";
+					pstmt = conn.prepareStatement(sql);						
+					rs= pstmt.executeQuery();
+					rs.next();
+					no = rs.getLong(1);
+					
+					sql = "insert into post values(null, '아직 글이없습니다.','글을 작성해주세요',now(),?);";
+					pstmt = conn.prepareCall(sql);
+					pstmt.setLong(1,no);
+					count = pstmt.executeUpdate();
+					
+					result = count == 1;					
+				}
+				
+				
 			}
+			
+			
 			
 		}  catch (SQLException e) {
 //			throw new UserDaoException("회원정보 저장 실패");

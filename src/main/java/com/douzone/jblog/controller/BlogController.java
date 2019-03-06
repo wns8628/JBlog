@@ -17,12 +17,13 @@ import com.douzone.jblog.service.BlogService;
 import com.douzone.jblog.service.FileuploadService;
 import com.douzone.jblog.vo.BlogVo;
 import com.douzone.jblog.vo.CategoryVo;
+import com.douzone.jblog.vo.PostVo;
 import com.douzone.jblog.vo.UserVo;
 import com.douzone.security.AuthUser;
 
 
 @Controller
-@RequestMapping("/{id:(?!assets).*}")
+@RequestMapping(value= "/{id:(?!assets|uploads).*}")
 public class BlogController {
 	@Autowired
 	BlogService blogService;
@@ -36,7 +37,7 @@ public class BlogController {
 					    Model model){
 					// ModelMap modelMap 이걸써봐라
 		
-		long categoryNo = 1;
+		long categoryNo = 1;		
 		long postNo = 1;
 		
 //널이아니면-----------------------------------
@@ -61,7 +62,6 @@ public class BlogController {
 	}
 	
 //--------------------------------------------------------------------
-	
 	@RequestMapping(value="/admin" , method=RequestMethod.GET)
 	public String post(@PathVariable String id,
 					   Model model){
@@ -74,36 +74,41 @@ public class BlogController {
 	@RequestMapping(value="/admin" , method=RequestMethod.POST)
 	public String post(@AuthUser UserVo authUser, 
 					   @RequestParam(value="logo-file") MultipartFile multipartFile,
-					   BlogVo blogVo){
+					   BlogVo blogVo,
+					   @RequestParam(value="keep-logo") String logo){
 		
-		System.out.println(authUser.toString());
+		blogVo.setLogo(logo);
 		
 		if(multipartFile.isEmpty() == false) {
-			String logo = fileuploadService.restore(multipartFile);
-			blogVo.setLogo(logo);
-			blogService.adminUpdata(authUser.getNo(),blogVo);
+			logo = fileuploadService.restore(multipartFile);
+			blogVo.setLogo(logo);			
 		}
 		
-		return "blog/blog-admin-basic";			
+		blogService.adminUpdata(authUser.getNo(),blogVo);
+		
+		return "redirect:/" + authUser.getId();			
 	}
 	
 //---------------------------------------------------------------------
-	
-//	@RequestMapping(value="/admin/category" ,method=RequestMethod.GET)
-//	public String category(@AuthUser UserVo authUser, 
-//						   Model model){
-//		
-//		
-//		List<CategoryVo> categoryList = blogService.adminCategory(authUser.getNo());
-//		System.out.println(categoryList);
-//		model.addAttribute("categoryList",categoryList);
-//		return "blog/blog-admin-category";			
-//	}
-	
+
 	@RequestMapping(value="/admin/write" ,method=RequestMethod.GET)
-	public String write(){
+	public String write(@AuthUser UserVo authUser,
+						Model model){
 		
+		List<CategoryVo> categoryList = blogService.adminCategory(authUser.getNo());
+		model.addAttribute("categoryList",categoryList);
 		return "blog/blog-admin-write";			
 	}
 		
+	@RequestMapping(value="/admin/write" ,method=RequestMethod.POST)
+	public String write(@AuthUser UserVo authUser,
+						CategoryVo categoryVo,
+						PostVo postVo){
+		
+		System.out.println("categoryVo :" +  categoryVo);
+		System.out.println("postVo :" +  postVo);
+		
+		blogService.write(categoryVo.getNo(), postVo);
+		return "redirect:/" + authUser.getId();					
+	}
 }

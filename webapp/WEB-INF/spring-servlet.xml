@@ -44,7 +44,7 @@
 	<mvc:default-servlet-handler/>
 	
 	<!-- the mvc resources mapping url(virtual) 가상? -->
-	<mvc:resources mapping="/assets/images/**" location="file:/duzon/uploads/"/>
+	<mvc:resources mapping="/uploads/images/**" location="file:/duzon/uploads/"/>
 	
 	<!-- 어노테이션설정을하겠다  -->
 	<context:annotation-config />

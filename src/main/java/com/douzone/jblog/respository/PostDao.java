@@ -15,7 +15,98 @@ import com.douzone.jblog.vo.UserVo;
 
 @Repository
 public class PostDao {
+//	public int getCount(long userNo) {
+//
+//		int result = 0;
+//		Connection conn = null;
+//		PreparedStatement pstmt = null;
+//		ResultSet rs = null;		
+//		
+//		try {
+//			 conn = getConnection();	
+//			 
+//			String sql="select count(*)\r\n" + 
+//					"     from post a, category b\r\n" + 
+//					"	where a.CATEGORY_NO = b.no \r\n" + 
+//					"      and b.user_no = ? ";
+//								
+//			pstmt = conn.prepareCall(sql);
+//			pstmt.setLong(1, userNo);
+//
+//			
+//			rs = pstmt.executeQuery();
+//
+//			if(rs.next()) {
+//				result = rs.getInt(1);
+//			}		
+//			 
+//		}  catch (SQLException e) {
+//			System.out.println( "error: "+e );
+//		} finally {
+//			try {
+//				if(rs != null) {
+//					rs.close();
+//				}
+//				if(conn != null) {
+//					conn.close();
+//				}
+//				if(pstmt != null) {
+//					pstmt.close();
+//				}
+//			} catch(SQLException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//		
+//		return result;
+//	}
+	
+	public long get(long userNo) {
 
+		long result = 0;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;		
+		
+		try {
+			 conn = getConnection();	
+			 
+			String sql="  select max(a.no) \r\n" + 
+					"     from post a, category b\r\n" + 
+					"	where a.CATEGORY_NO = b.no \r\n" + 
+					"      and b.user_no = ? ";
+								
+			pstmt = conn.prepareCall(sql);
+			pstmt.setLong(1, userNo);
+
+			
+			rs = pstmt.executeQuery();
+
+			if(rs.next()) {
+				result = rs.getLong(1);
+			}		
+			 
+		}  catch (SQLException e) {
+			System.out.println( "error: "+e );
+		} finally {
+			try {
+				if(rs != null) {
+					rs.close();
+				}
+				if(conn != null) {
+					conn.close();
+				}
+				if(pstmt != null) {
+					pstmt.close();
+				}
+			} catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
+	
 	public PostVo get(long userNo,long categoryNo, long postNo) {
 
 		PostVo result = null;
@@ -58,6 +149,100 @@ public class PostDao {
 				if(rs != null) {
 					rs.close();
 				}
+				if(conn != null) {
+					conn.close();
+				}
+				if(pstmt != null) {
+					pstmt.close();
+				}
+			} catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
+	
+//	public PostVo get(long userNo, long postNo) {
+//
+//		PostVo result = null;
+//		Connection conn = null;
+//		PreparedStatement pstmt = null;
+//		ResultSet rs = null;		
+//		
+//		try {
+//			 conn = getConnection();	
+//			 
+//			String sql="select a.no, a.title, a.content, a.reg_date, a.category_no\r\n" + 
+//					"  from post a, category b \r\n" + 
+//					" where a.category_no = b.no\r\n" + 
+//					"   and b.user_no = ?" + 
+//					"   and a.no=? ";
+//								
+//			pstmt = conn.prepareCall(sql);
+//			pstmt.setLong(1, userNo);
+//			pstmt.setLong(2, postNo);
+//			
+//			
+//			rs = pstmt.executeQuery();
+//
+//			if(rs.next()) {
+//				result = new PostVo();
+//				
+//				result.setNo(rs.getLong(1));
+//				result.setTitle(rs.getString(2));
+//				result.setContent(rs.getString(3));
+//				result.setRegDate(rs.getString(4));
+//				result.setCategoryNo(9999);
+//			}		
+//			 
+//		}  catch (SQLException e) {
+//			System.out.println( "error: "+e );
+//		} finally {
+//			try {
+//				if(rs != null) {
+//					rs.close();
+//				}
+//				if(conn != null) {
+//					conn.close();
+//				}
+//				if(pstmt != null) {
+//					pstmt.close();
+//				}
+//			} catch(SQLException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//		
+//		return result;
+//	}
+	
+	public boolean insert(long categoryNo, PostVo vo) /*throws UserDaoException*/ {
+		boolean result=false;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			conn = getConnection();	
+			 
+			String sql="insert into post values(null, ?,?,now(),?)";
+			pstmt = conn.prepareCall(sql);
+			
+			pstmt.setString(1, vo.getTitle());
+			pstmt.setString(2, vo.getContent());
+			pstmt.setLong(3, categoryNo);
+			
+			int count = pstmt.executeUpdate();
+			
+			result = count == 1;
+		
+				
+
+		}  catch (SQLException e) {
+//			throw new UserDaoException("회원정보 저장 실패");
+			System.out.println("error:" + e);
+		} finally {
+			try {
 				if(conn != null) {
 					conn.close();
 				}
@@ -131,6 +316,63 @@ public List<PostVo> getList(long userNo,long categoryNo){
 		}
 		return list;
 	}
+
+//public List<PostVo> getList(long userNo){
+//	
+//	List<PostVo> list = new ArrayList<PostVo>();
+//	
+//	Connection conn = null;
+//	ResultSet rs =null;
+//	PreparedStatement pstmt = null;
+//	
+//	try {
+//		 conn = getConnection();
+//		 pstmt = null;
+//		 rs = null;
+//		
+//		 
+//		String sql = "select a.no, a.title, a.content, a.reg_date, a.category_no\r\n" + 
+//				"  from post a, category b \r\n" + 
+//				" where a.category_no = b.no\r\n" + 
+//				"   and b.user_no = ? " + 
+//				"   order by reg_date desc";
+//			
+//		pstmt = conn.prepareCall(sql);
+//		pstmt.setLong(1, userNo);			
+//		rs= pstmt.executeQuery();
+//		  			
+//		while(rs.next()) {
+//			
+//			PostVo vo = new PostVo();
+//			
+//			vo.setNo(rs.getLong(1));
+//			vo.setTitle(rs.getString(2));
+//			vo.setContent(rs.getString(3));
+//			vo.setRegDate(rs.getString(4));
+//			vo.setCategoryNo(9999);
+//
+//			list.add(vo);
+//		}
+//		
+//	} catch (SQLException e) {
+//		System.out.println( "error: "+e );
+//	} finally {
+//		try {
+//			if(rs != null) {
+//				rs.close();
+//			}
+//			if(pstmt != null) {
+//				pstmt.close();
+//			}
+//			if(conn != null) {
+//				conn.close();
+//			}
+//		} catch(SQLException e) {
+//			e.printStackTrace();
+//		}
+//	}
+//	return list;
+//}
 	
 	private Connection getConnection() throws SQLException {
 	      Connection conn = null;

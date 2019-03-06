@@ -6,6 +6,37 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.9.0.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+var FormValidator= {		
+		init: function(){				
+			$("#write-form").submit(this.onFormSubmit.bind(this));
+		},
+		onFormSubmit: function(){		
+			if($("#title").val() == ""){
+				alert("제목은 필수 입력 항목입니다.");
+				$("#title").focus();
+				return false;
+			if($("#contentPost").val() == ""){
+				alert("내용은 필수 입력 항목입니다.");
+				$("#contentPost").focus();
+				return false;
+			}
+			if($("#selectCategory").val() == "not"){
+				alert("내용은 필수 입력 항목입니다.");
+				$("#selectCategory").focus();
+				return false;
+			}
+			//인증됨!
+			return true;
+		}
+	}
+}
+$(function(){
+	FormValidator.init();
+});
+</script>
 <title>JBlog</title>
 <Link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/jblog.css">
 </head>
@@ -25,21 +56,23 @@
 					<c:param name="menu" value="blog-write"/>
 				</c:import>
 				
-				<form action="" method="post">
+				<form id="write-form" action="${pageContext.request.contextPath}/${authuser.id}/admin/write" method="post">
 			      	<table class="admin-cat-write">
 			      		<tr>
 			      			<td class="t">제목</td>
 			      			<td>
-			      				<input type="text" size="60" name="title">
-				      			<select name="category">
-				      				<option>미분류</option>
-				      				<option>자바</option>
+			      				<input type="text" size="60" id="title" name="title">
+				      			<select name="no" id="selectCategory">
+			      					<option value="not">카테고리 선택</option>
+				      				<c:forEach  items="${categoryList}" var="categoryListVo" varStatus="status">	
+				      					<option value="${categoryListVo.no }">${categoryListVo.name}</option>
+				      				</c:forEach>
 				      			</select>
 				      		</td>
 			      		</tr>
 			      		<tr>
 			      			<td class="t">내용</td>
-			      			<td><textarea name="content"></textarea></td>
+			      			<td><textarea name="content" id="contentPost"></textarea></td>
 			      		</tr>
 			      		<tr>
 			      			<td>&nbsp;</td>

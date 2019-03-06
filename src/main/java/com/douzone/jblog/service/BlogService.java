@@ -24,25 +24,49 @@ public class BlogService {
 	CategoryDao categoryDao;
 
 	
+//	public long latestPosts(String id) {
+//		//1.userNo구하기 
+//		long userNo = blogDao.get(id);
+//		//1-1.가장 최신글 가져오기(처음접속시 보이는것)
+//		long topNo = postDao.get(userNo);
+//		return topNo;
+//	}
+	
+	
 	public Map<String,Object> getblog(String id, Long categoryNo , Long postNo) {
 		//1.userNo구하기 
 		long userNo = blogDao.get(id);
-		
+
 		//2.타이틀 로고가져오기 
 		BlogVo blogVo = blogDao.get(userNo);
 		//3.카테고리리스트가져오기
-		List<CategoryVo> categoryList= categoryDao.getList(userNo);
+		List<CategoryVo> categoryList;
+		categoryList= categoryDao.getList(userNo);
+		//전체글 세팅하기
+		//int sumPost = postDao.getCount(userNo);
+		//categoryList.get(0).setPostCount(sumPost);
+		
 		//4.포스트 가져오기
-		PostVo postVo = postDao.get(userNo, categoryNo, postNo);
+		PostVo postVo;
+//		if(categoryNo== 9999) {
+//			postVo = postDao.get(userNo, postNo);			
+//		}else {
+			postVo = postDao.get(userNo, categoryNo, postNo);			
+//		}
 		//5.글목록 가져오기
-		List<PostVo> postList = postDao.getList(userNo, categoryNo);
+		List<PostVo> postList;
+//		if(categoryNo== 9999) {
+//		   postList = postDao.getList(userNo);
+//		}else {
+		   postList = postDao.getList(userNo, categoryNo);	
+//		}
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("blogVo", blogVo);
 		map.put("categoryList", categoryList);
 		map.put("postVo", postVo);
 		map.put("postList", postList);
-					
+	
 		return map;
 	}
 	
@@ -59,5 +83,11 @@ public class BlogService {
 	}
 	public long adminPutCategory(long userNo,CategoryVo categoryVo){		
 		return categoryDao.insert(userNo, categoryVo);
+	}
+	public boolean adminDeleteCategory(long userNo,long categoryNo){		
+		return categoryDao.delete(userNo, categoryNo);
+	}
+	public boolean write(long categoryNo, PostVo postVo) {
+		return postDao.insert(categoryNo,postVo); 
 	}
 }

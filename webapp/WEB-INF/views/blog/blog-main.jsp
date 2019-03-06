@@ -51,7 +51,9 @@
 
 		<div id="extra">
 			<div class="blog-logo">
-				<img src="${pageContext.request.contextPath}${blogVo.logo}">
+				<img 
+				onerror="this.src='${pageContext.request.contextPath }/assets/images/default.png'" 
+				src="${pageContext.request.contextPath}${blogVo.logo}">
 			</div>
 		</div>
 
@@ -59,7 +61,10 @@
 			<h2>카테고리</h2>
 			<ul>
 				<c:forEach items="${categoryList}" var="categoryVo" varStatus="status">					
-					<li><a href="${pageContext.request.contextPath}/${userId}/${categoryVo.no }/${categoryVo.topPostNo}">${categoryVo.name }</a></li>
+					<li>
+						<a href="${pageContext.request.contextPath}/${userId}/${categoryVo.no }/${categoryVo.topPostNo}">${categoryVo.name }</a>
+						<span style="color:blue">(${ categoryVo.postCount})</span>
+					</li>
 				</c:forEach>
 			</ul>
 		</div>
