@@ -148,6 +148,57 @@ public class UserDao {
 	}
 	
 	
+	public UserVo get(String id) {
+
+		UserVo result = null;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;		
+		
+		try {
+			 conn = getConnection();	
+			 
+			String sql="select no,name" + 
+						"  from user  \r\n" + 
+						" where id =?";
+								
+			pstmt = conn.prepareCall(sql);
+			pstmt.setString(1, id);
+			
+			rs = pstmt.executeQuery();
+
+			if(rs.next()) {
+
+				long no = rs.getLong(1);
+				String name = rs.getString(2);
+
+				result = new UserVo();
+				
+				result.setNo(no);
+				result.setName(name);	
+			}		
+			 
+		}  catch (SQLException e) {
+			System.out.println( "error: "+e );
+		} finally {
+			try {
+				if(rs != null) {
+					rs.close();
+				}
+				if(conn != null) {
+					conn.close();
+				}
+				if(pstmt != null) {
+					pstmt.close();
+				}
+			} catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
+	
 	
 	   // 커넥트함수
 	private Connection getConnection() throws SQLException {

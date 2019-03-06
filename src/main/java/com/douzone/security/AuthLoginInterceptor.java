@@ -19,7 +19,6 @@ public class AuthLoginInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		
-		System.out.println("오나요~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 		//new UserService().getUser(email,password); //이러면 망하지 왜냐 의존성해결을 우리가 직접하겠다는거잔아 
 		
 		//그래서 직접 컨테이너에 접근해서 가져와야함 - 전역범위컨텍스트임? -라이프스코프-
@@ -47,7 +46,7 @@ public class AuthLoginInterceptor extends HandlerInterceptorAdapter {
 		
 		authUser = userService.login(authUser);		
 		if(authUser == null) {
-			response.sendRedirect(request.getContextPath()+ "/user/login");
+			response.sendRedirect(request.getContextPath()+ "/user/login?result=fail");
 			return false;
 		}
 		System.out.println(authUser);

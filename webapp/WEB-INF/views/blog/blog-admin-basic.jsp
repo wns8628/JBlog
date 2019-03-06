@@ -9,17 +9,23 @@
 <script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.9.0.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
-
-var valied = function(){
-	
-	//validate form data 유효성검사
-	var title = $("#title").val();
-	if(title == ""){
-		alert("제목은 필수 입력 항목입니다.");
-		return false;
-	} 
-	return true;
-}
+var FormValidator= {		
+		init: function(){				
+			$("#admin-form").submit(this.onFormSubmit.bind(this));
+		},
+		onFormSubmit: function(){		
+			if($("#title").val() == ""){
+				alert("타이틀은 필수 입력 항목입니다.");
+				$("#title").focus();
+				return false;
+			}
+			//인증됨!
+			return true;
+		}
+	}
+$(function(){
+	FormValidator.init();
+});
 </script>
 <title>JBlog</title>
 <Link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/jblog.css">
@@ -40,7 +46,7 @@ var valied = function(){
 					<c:param name="menu" value="blog-basic"/>
 				</c:import>
 				
-				<form onsubmit="return valied()" action="${pageContext.request.contextPath}/${authuser.id}/admin" method="post"
+				<form id="admin-form" action="${pageContext.request.contextPath}/${authuser.id}/admin" method="post"
 					  enctype="multipart/form-data">
 					  
 	 		      	<table class="admin-config">

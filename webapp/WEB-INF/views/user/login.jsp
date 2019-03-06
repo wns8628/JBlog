@@ -50,7 +50,12 @@ $(function(){
 		
 		<form id="login-form" class="login-form" action="${pageContext.request.contextPath}/user/auth" method="post">
       		<label>아이디</label> <input type="text" id="id" name="id">
-      		<label>패스워드</label> <input type="text" id="password" name="password">
+      		<label>패스워드</label> <input type="password" id="password" name="password">
+				<c:if test="${param.result eq 'fail'}">
+					<p>
+						로그인이 실패 했습니다.
+					</p>
+				</c:if>
       		<input type="submit" value="로그인">
 		</form>
 	</div>

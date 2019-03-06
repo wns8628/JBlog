@@ -19,4 +19,7 @@ public class UserService {
 		return userDao.get(userVo);
 	}
 	
+	public UserVo existId(String id) {
+		return userDao.get(id); 
+	}
 }

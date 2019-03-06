@@ -19,6 +19,7 @@ import com.douzone.jblog.vo.BlogVo;
 import com.douzone.jblog.vo.CategoryVo;
 import com.douzone.jblog.vo.PostVo;
 import com.douzone.jblog.vo.UserVo;
+import com.douzone.security.Auth;
 import com.douzone.security.AuthUser;
 
 
@@ -62,15 +63,23 @@ public class BlogController {
 	}
 	
 //--------------------------------------------------------------------
+	@Auth
 	@RequestMapping(value="/admin" , method=RequestMethod.GET)
 	public String post(@PathVariable String id,
+					   @AuthUser UserVo authUser, 
 					   Model model){
+		
+		if(!(authUser.getId() == id)) {
+			BlogVo blogVo = blogService.getAdmin(authUser.getId());
+			model.addAttribute("blogVo", blogVo );
+			return "blog/blog-admin-basic";	
+		}		
 		
 		BlogVo blogVo = blogService.getAdmin(id);
 		model.addAttribute("blogVo", blogVo );
 		return "blog/blog-admin-basic";			
 	}
-	
+	@Auth
 	@RequestMapping(value="/admin" , method=RequestMethod.POST)
 	public String post(@AuthUser UserVo authUser, 
 					   @RequestParam(value="logo-file") MultipartFile multipartFile,
@@ -90,7 +99,7 @@ public class BlogController {
 	}
 	
 //---------------------------------------------------------------------
-
+	@Auth
 	@RequestMapping(value="/admin/write" ,method=RequestMethod.GET)
 	public String write(@AuthUser UserVo authUser,
 						Model model){
@@ -99,7 +108,7 @@ public class BlogController {
 		model.addAttribute("categoryList",categoryList);
 		return "blog/blog-admin-write";			
 	}
-		
+	@Auth	
 	@RequestMapping(value="/admin/write" ,method=RequestMethod.POST)
 	public String write(@AuthUser UserVo authUser,
 						CategoryVo categoryVo,

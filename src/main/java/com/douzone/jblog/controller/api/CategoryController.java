@@ -12,6 +12,7 @@ import com.douzone.dto.JSONResult;
 import com.douzone.jblog.service.BlogService;
 import com.douzone.jblog.vo.CategoryVo;
 import com.douzone.jblog.vo.UserVo;
+import com.douzone.security.Auth;
 import com.douzone.security.AuthUser;
 
 @Controller
@@ -20,11 +21,12 @@ public class CategoryController {
 	@Autowired
 	private BlogService blogService;
 	
+	@Auth
 	@RequestMapping(value="/admin/category" ,method=RequestMethod.GET)
 	public String category(){
 		return "blog/blog-admin-category";		
 	}
-	
+	@Auth
 	@ResponseBody
 	@RequestMapping(value="/admin/category/list" ,method=RequestMethod.GET)
 	public Object category(@AuthUser UserVo authUser){
@@ -33,7 +35,7 @@ public class CategoryController {
 		
 		return JSONResult.success(categoryList);		
 	}
-	
+	@Auth
 	@ResponseBody
 	@RequestMapping(value="/admin/category/list" ,method=RequestMethod.POST)
 	public Object category(@AuthUser UserVo authUser,
@@ -44,7 +46,7 @@ public class CategoryController {
 		
 		return JSONResult.success(categoryVo);		
 	}
-	
+	@Auth
 	@ResponseBody
 	@RequestMapping(value="/admin/category/list/delete" ,method=RequestMethod.POST)
 	public Object categorydelete(@AuthUser UserVo authUser,

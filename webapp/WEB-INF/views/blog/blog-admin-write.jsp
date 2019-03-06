@@ -18,13 +18,14 @@ var FormValidator= {
 				alert("제목은 필수 입력 항목입니다.");
 				$("#title").focus();
 				return false;
+			}
 			if($("#contentPost").val() == ""){
 				alert("내용은 필수 입력 항목입니다.");
 				$("#contentPost").focus();
 				return false;
 			}
 			if($("#selectCategory").val() == "not"){
-				alert("내용은 필수 입력 항목입니다.");
+				alert("카테고리를 선택하세요");
 				$("#selectCategory").focus();
 				return false;
 			}
@@ -32,7 +33,6 @@ var FormValidator= {
 			return true;
 		}
 	}
-}
 $(function(){
 	FormValidator.init();
 });
