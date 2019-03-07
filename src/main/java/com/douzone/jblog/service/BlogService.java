@@ -58,7 +58,7 @@ public class BlogService {
 //		if(categoryNo== 9999) {
 //		   postList = postDao.getList(userNo);
 //		}else {
-		   postList = postDao.getList(userNo, categoryNo);	
+		   postList = postDao.getList(userNo, categoryNo , postNo);	
 //		}
 		
 		Map<String, Object> map = new HashMap<String, Object>();

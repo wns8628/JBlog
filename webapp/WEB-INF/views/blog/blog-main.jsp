@@ -25,6 +25,9 @@
 					<p>
 				</div>
 				<ul class="blog-list">
+				 	글 목록
+				 	<hr>
+				 	<hr>
 					<c:forEach items="${postList}" var="postListVo" varStatus="status">	
 					  	<c:choose>				
 					  		<c:when test="${postVo.no == postListVo.no}">

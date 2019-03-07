@@ -72,7 +72,7 @@ div#container		{ text-align:left }
 div#content	.blog-content	{ padding:10px }
 .blog-content h4			{ font-size:1.3em; color:#9D96D0 }
 .blog-content p				{ margin-top:10px; line-height:150% }
-div#content .blog-list		{ margin:20px 0 10px 10px }
+div#content .blog-list		{ margin:20px 0 10px 10px ; border:1px solid black; padding:10px ; width: 626px;}
 .blog-list 					{ width:100% }
 .blog-list li				{ height:20px; clear:both; }
 .blog-list li a				{ display:block; float:left }

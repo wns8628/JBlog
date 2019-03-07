@@ -258,7 +258,7 @@ public class PostDao {
 	}
 	
 
-public List<PostVo> getList(long userNo,long categoryNo){
+public List<PostVo> getList(long userNo,long categoryNo, long postNo){
 		
 		List<PostVo> list = new ArrayList<PostVo>();
 		
@@ -270,18 +270,63 @@ public List<PostVo> getList(long userNo,long categoryNo){
 			 conn = getConnection();
 			 pstmt = null;
 			 rs = null;
-			
 			 
-			String sql = "select a.no, a.title, a.content, a.reg_date, a.category_no\r\n" + 
-					"  from post a, category b \r\n" + 
-					" where a.category_no = b.no\r\n" + 
-					"   and a.category_no = ? " + 
-					"   and b.user_no = ? " + 
-					"   order by reg_date desc";
+			 String sql = "SET @rownum:=0";			 
+			 pstmt = conn.prepareCall(sql);
+			 pstmt.executeQuery();
+	 
+	 		sql = "select indexNo from (select @rownum:=@rownum+1 as indexNo, a.no " + 
+			 	  "				  from post a, category b " + 
+			 	  "				 where a.category_no = b.no " + 
+			 	  "				   and a.category_no = ? " + 
+			 	  "				   and b.user_no = ? " + 
+			 	  "				   order by a.reg_date desc) a " + 
+			 	  "where a.no = ?";
+			 
+				 pstmt = conn.prepareCall(sql);
+			  	 pstmt.setLong(1, categoryNo);
+			 	 pstmt.setLong(2, userNo);	
+			 	 pstmt.setLong(3, postNo);	
+			 	 
+				 rs= pstmt.executeQuery();
+			  	 rs.next();		  	 
+			 	 int index = rs.getInt(1)-5; //---------------인덱스구함
+
+		 	 sql = "select count(*)\r\n" + 
+		 	 		"  from post a, category b \r\n" + 
+		 	 		" where a.category_no = b.no\r\n" + 
+		 	 		"   and a.category_no = ?\r\n" + 
+		 	 		"   and b.user_no = ?";
+		 	 
+				 pstmt = conn.prepareCall(sql);
+			  	 pstmt.setLong(1, categoryNo);
+			 	 pstmt.setLong(2, userNo);	
+			 	 
+				 rs= pstmt.executeQuery();
+			  	 rs.next();		  	 
+			 	 int count = rs.getInt(1); //-----------------총개수 구함
+		 	 		  	 			 	 
+		 	if(index > (count-9) ) {
+		 		index =  count-9;
+		 	 }
+		 	 if(index < 0 ) {
+		 		 index = 0;
+		 	 }
+		 	  
+		 	 
+			 sql = "select a.no, a.title, a.content, a.reg_date, a.category_no\r\n" + 
+			 		"  from post a, category b \r\n" + 
+			 		" where a.category_no = b.no\r\n" + 
+			 		"   and a.category_no = ?\r\n" + 
+			 		"   and b.user_no = ?\r\n" + 
+			 		"   order by reg_date desc\r\n" + 
+			 		"   limit ?,9";
 				
 			pstmt = conn.prepareCall(sql);
 			pstmt.setLong(1, categoryNo);
-			pstmt.setLong(2, userNo);			
+			pstmt.setLong(2, userNo);		
+			pstmt.setInt(3, index);		
+			
 			rs= pstmt.executeQuery();
 			  			
 			while(rs.next()) {
